@@ -1,0 +1,124 @@
+include irvine32.inc
+
+Vehicle Struct
+name1 DWORD ?
+color1 DWORD ?
+parts BYTE 5 DUP(?)
+price BYTE ?
+Vehicle ENDS
+
+input MACRO data1
+xor eax,eax
+xor edx,edx
+xor esi,esi
+	xor ecx,ecx
+	mov ecx,10
+	mov edx,offset data1.name1
+	call readstring
+	
+
+	xor edx,edx
+	xor ecx,ecx
+	mov ecx,10
+	mov edx,offset data1.color1
+	call readstring
+	
+	xor eax,eax
+	call readint
+	mov data1.price,al
+ENDM
+
+
+
+output MACRO data2
+xor eax,eax
+xor edx,edx
+xor esi,esi
+	mov edx,offset data2.name1
+	call writestring
+	call crlf
+
+	xor edx,edx
+	mov edx,offset data2.color1
+	call writestring
+	call crlf
+	
+	xor eax,eax
+	mov al,data2.price
+	call writedec
+	call crlf
+ENDM
+
+swap MACRO s1,s2,s3
+xor eax,eax
+xor edx,edx
+xor esi,esi
+	mov edx,offset s1.name1
+	mov s2.name1,edx
+	xchg edx,s2.name1
+	
+	xor edx,edx
+	mov edx,s2.color1
+	xchg s1.color1,edx
+	xchg edx,s2.color1
+
+	mov ecx,5
+	J1:
+	xor eax,eax
+	mov al,s1.parts[esi]
+	xchg al,s2.parts[esi]
+	xchg s1.parts[esi],al
+	
+	inc esi
+	loop J1
+	
+	xor eax,eax
+	mov al,s1.price
+	xchg s2.price,al
+	xchg al,s1.price
+ENDM
+
+.data
+ob1 Vehicle <,,,>
+ob2 Vehicle <,,,>
+ob3 Vehicle <,,,>
+
+.code
+inputArr Proc data1:Vehicle
+mov esi,0
+mov ecx,5
+	LOOP1:
+	call readint
+	mov data1.parts[esi],al
+	inc esi
+	loop LOOP1
+	ret
+inputArr endp
+outputArr Proc data1:Vehicle
+mov esi,0
+mov ecx,5
+	LOOP1:
+	mov al,data1.parts[esi]
+	call writedec
+	call crlf
+	inc esi
+	loop LOOP1
+	ret
+outputArr endp
+
+main proc
+input ob1
+invoke inputArr,ob1
+input ob2
+invoke inputArr,ob2
+
+swap ob1,ob2
+output ob1
+INVOKE outputArr,ob1
+output ob2
+INVOKE outputArr,ob2
+
+
+exit
+main endp
+end main

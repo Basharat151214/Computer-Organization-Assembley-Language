@@ -1,0 +1,161 @@
+LAB TASK #9
+P17-6102
+Basharat Hussain
+Q3#
+include irvine32.inc
+.data
+b1 WORD ?
+count BYTE 1
+
+.code
+main proc
+xor eax,eax
+xor ebx,ebx
+xor ebx,ebx
+call readint
+call writebin
+call crlf
+mov b1,ax
+
+L1:
+	mov ecx,16
+	 L2:
+	SHL b1,1
+	
+	jnc A1
+	add bx,1
+	mov ax,bx
+	
+	A1:
+	LOOP L2
+	cmp bx,1
+	JB J2
+	add count,1
+	mov ecx,1
+LOOP L1
+J2:
+mov al,count
+call writedec
+call crlf
+
+exit
+main endp
+end main
+
+Q4#
+include irvine32.inc
+.data
+.code
+bitwise proc
+mov  edx,0
+mov  ecx,32
+
+L1:	
+test ebx,1
+jz   L2	
+
+add  edx,eax	
+jc L3	
+
+L2:
+shr  ebx,1
+shl  eax,1	
+jc L3	
+	
+LOOP L1	
+
+L3:	
+mov  eax,edx
+
+ret
+bitwise endp
+
+main proc
+xor eax,eax
+xor ebx,ebx
+mov eax,5
+mov ebx,28
+
+call bitwise
+call WriteDec
+call Crlf
+
+exit
+main endp
+end main
+Q5#
+include irvine32.inc
+.data
+arrayByte byte 0ABh, 0BCh, 0CDh, 0DEh, 0EFh, 0FAh
+arrayInput word 01234h, 05678h, 0789Ah, 09ABCh, 0BCDEh, 0DE12h
+outt WORD 6 DUP(0) ,0
+a3 WORD ?
+a4 WORD ?
+
+.code
+main proc
+xor eax,eax
+xor ebx,ebx
+xor ecx,ecx
+mov ecx,6
+L1:
+movzx ax,arrayByte
+mov bx,arrayInput
+call writehex
+call crlf
+shld a3,bx,4
+shld a3,ax,4
+
+mov ax,a3
+LOOP L1
+call writehex
+
+
+exit
+main endp
+end main
+
+
+
+
+
+INCLUDE Irvine32.inc
+.data
+	val word  15
+
+
+
+
+.code
+	Main Proc
+	XOR EAX,EAX
+		mov ax,val
+		
+		call writebin
+		call dumpregs
+		call crlf
+		SHL ax,1
+	
+	
+		call writebin
+		call dumpregs
+	call crlf
+	call crlf
+	call crlf
+	
+	
+	
+	XOR EAX,EAX
+		mov ax,val
+		call writehex
+		call crlf
+		SHR ax,4
+		
+		call writehex
+		call writehex
+	call crlf
+
+
+	exit
+	main endp
+	END MAIN
